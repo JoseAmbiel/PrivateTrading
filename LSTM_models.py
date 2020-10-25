@@ -38,13 +38,13 @@ def my_callback(history, epoch, SOSSEGO, sossego_counter, sum_losses, min_val_lo
         if sossego_counter >= SOSSEGO:
             condit = False
             print()
-            print('STOPPING TRANING:')
+            print('STOPPING TRANING ON EPOCH:' + str(epoch))
             print('sossego_counter = ' + str(sossego_counter))
     
     if (loss + 0.01) < val_loss:
         condit = False
         print()
-        print('STOPPING TRANING:')
+        print('STOPPING TRANING ON EPOCH:' + str(epoch))
         print('loss = ' + str(loss) + ' and val_loss = ' + str(val_loss))
     else:
         if (loss+val_loss) < sum_losses:
