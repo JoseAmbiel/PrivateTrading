@@ -49,7 +49,7 @@ def my_callback(history, epoch, SOSSEGO, sossego_counter, sum_losses, min_val_lo
     else:
         if (loss+val_loss) < sum_losses:
             sum_losses = loss + val_loss
-            model.save(filepath+name)
+            model.save(filepath+name+'.h5')
             print('Epoch: {:4} at {}  -  loss: {:6.4f}  -  accuracy: {:6.4f}  -  val_loss: {:6.4f}  -  val_accuracy: {:6.4f}'.format(epoch, datetime.datetime.now().time(), loss, accu, val_loss, val_accu))
     
     return epoch, condit, sossego_counter, sum_losses, min_val_loss
