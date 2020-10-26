@@ -169,6 +169,15 @@ def wil_scale(data):
 
     return data1
 
+# -------------------- Momentum scaling ------------------- #
+def mom_scale(data):
+    data1 = data.T
+    data1 = data1[1:, :]
+    data1 = data1 / 50
+    data1 = data1.T
+   
+    return data1
+
 # --------------------- Model scaling --------------------- #
 def mdl_scale(data):
     data1 = data.T
@@ -180,5 +189,6 @@ def mdl_scale(data):
 
     return data1
 
-dispatcher = {'pct':pct_scale, 'scl':scl_scale, 'scl_group':scl_scale_group, 'dif':dif_scale, 'rsi':rsi_scale, 'sto':sto_scale, 'wil':wil_scale, 'mdl':mdl_scale}
+
+dispatcher = {'pct':pct_scale, 'scl':scl_scale, 'scl_group':scl_scale_group, 'dif':dif_scale, 'rsi':rsi_scale, 'sto':sto_scale, 'wil':wil_scale, 'mom':mom_scale, 'mdl':mdl_scale}
 
