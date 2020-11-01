@@ -22,7 +22,7 @@ def csvlog(filepath, name):
     csv_logger = CSVLogger(filepath+'logg-'+name+'.csv', append=True)
     return csv_logger
 
-def my_callback(history, epoch, SOSSEGO, sossego_counter, diff2stop, diff2nope, sum_losses, best_val_loss, min_val_loss, model, filepath, name):
+def my_callback(history, epoch, SOSSEGO, sossego_counter, diff2stop, diff2nope, sum_losses, min_val_loss, model, filepath, name):
     epoch += 1
     condit = True
     accu = history.history['accuracy'][0]
@@ -30,10 +30,7 @@ def my_callback(history, epoch, SOSSEGO, sossego_counter, diff2stop, diff2nope, 
     val_accu = history.history['val_accuracy'][0]
     val_loss = history.history['val_loss'][0]
 
-    if val_loss < min_val_loss:
-        min_val_loss = val_loss
-        sossego_counter = 0
-    else:
+    if val_loss > min_val_loss:
         sossego_counter += 1
         if sossego_counter >= SOSSEGO:
             condit = False
@@ -41,7 +38,7 @@ def my_callback(history, epoch, SOSSEGO, sossego_counter, diff2stop, diff2nope, 
             print('STOPPING TRANING ON EPOCH:' + str(epoch))
             print('sossego_counter = ' + str(sossego_counter))
     
-    if (loss + diff2stop) < val_loss:
+    if ((loss + diff2stop) < val_loss) and (val_loss > min_val_loss):
         condit = False
         print()
         print('STOPPING TRANING ON EPOCH:' + str(epoch))
@@ -49,14 +46,15 @@ def my_callback(history, epoch, SOSSEGO, sossego_counter, diff2stop, diff2nope, 
     else:
         if (loss + val_loss) < sum_losses:
             sum_losses = loss + val_loss
-            if val_loss < best_val_loss:
+            if val_loss < min_val_loss:
                 model.save(filepath+name+'.h5')
                 print('Epoch: {:4} at {}  -  loss: {:6.4f}  -  accuracy: {:6.4f}  -  val_loss: {:6.4f}  -  val_accuracy: {:6.4f}'.format(epoch, datetime.datetime.now().time(), loss, accu, val_loss, val_accu))
             elif (loss + diff2nope) > val_loss:
                 model.save(filepath+name+'.h5')
                 print('Epoch: {:4} at {}  -  loss: {:6.4f}  -  accuracy: {:6.4f}  -  val_loss: {:6.4f}  -  val_accuracy: {:6.4f}'.format(epoch, datetime.datetime.now().time(), loss, accu, val_loss, val_accu))
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
+        if val_loss < min_val_loss:
+            min_val_loss = val_loss
+            sossego_counter = 0
     
     return epoch, condit, sossego_counter, sum_losses, min_val_loss
 
