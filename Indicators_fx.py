@@ -211,7 +211,7 @@ def pctdiff2seq_scale(data, close_seq):
     return data1
 
 
-def scaling_data(sample_x, scale_type, close_pos):
+def scaling_data(sample_x, scale_type, scale_vect, close_pos):
     x = np.zeros((sample_x.shape[0], sample_x.shape[1]-1, sample_x.shape[2]))
     for i in range(0, len(scale_type)):
         if scale_type[i] == 'cld':
