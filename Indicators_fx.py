@@ -105,19 +105,15 @@ def xy_sample(df_data, close_pos, n_indic, SEQ_LEN, FUTURE_PERIOD_BASED, FUTURE_
 
 # ------------------- percentage scaling ------------------ #
 def pct_scale(data):
-    data1 = data.T
-    data1 = np.divide(data1[1:, :]-data1[0:-1, :], data1[0:-1, :])
-    data1 = preprocessing.scale(data1)
-    data1 = data1.T
+    data1 = np.divide(data1[:, 1:]-data1[:, 0:-1], data1[:, 0:-1])
+    data1 = preprocessing.scale(data1, axis=1)
 
     return data1
 
 # --------------------- normal scaling -------------------- #
 def scl_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
-    data1 = preprocessing.scale(data1)
-    data1 = data1.T
+    data1 = data1[:, 1:]
+    data1 = preprocessing.scale(data1, axis=1)
 
     return data1
 
@@ -126,8 +122,7 @@ def scl_scale_group(data):
     data1 = data[:, 1:, :]
     data1 = np.transpose(data1, (0, 2, 1))
     data1 = np.reshape(data1, (data1.shape[0], data1.shape[1]*data1.shape[2]))
-    data1 = preprocessing.scale(data1.T)
-    data1 = data1.T
+    data1 = preprocessing.scale(data1, axis=1)
     data1 = np.reshape(data1, (data.shape[0], data.shape[2], data.shape[1]-1))
     data1 = np.transpose(data1, (0, 2, 1))
 
@@ -136,56 +131,46 @@ def scl_scale_group(data):
 # ------------------- difference scaling ------------------ #
 def dif_scale(data):
     data1 = data.T
-    data1 = data1[1:, :]-data1[0:-1, :]
-    data1 = preprocessing.scale(data1)
+    data1 = data1[:, 1:]-data1[:, :-1]
+    data1 = preprocessing.scale(data1, axis=1)
     data1 = data1.T
 
     return data1
 
 # -------------------- RSI-like scaling ------------------- #
 def rsi_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
+    data1 = data1[:, 1:]
     data1 = (data1 - 50) / 50
-    data1 = data1.T
 
     return data1
 
 # ----------------- Stochastic-like scaling --------------- #
 def sto_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
+    data1 = data1[:, 1:]
     data1 = (data1 - 50) / 50
-    data1 = data1.T
 
     return data1
 
 # -------------------- WIL-like scaling ------------------- #
 def wil_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
+    data1 = data1[:, 1:]
     data1 = (data1 + 50) / 50
-    data1 = data1.T
 
     return data1
 
 # -------------------- Momentum scaling ------------------- #
 def mom_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
+    data1 = data1[:, 1:]
     data1 = data1 / 50
-    data1 = data1.T
    
     return data1
 
 # --------------------- Model scaling --------------------- #
 def mdl_scale(data):
-    data1 = data.T
-    data1 = data1[1:, :]
+    data1 = data1[:, 1:]
     data1[data1>=0.5] = 1
     data1[data1< 0.5] = 0
 #     data1 = data1 - 0.5
-    data1 = data1.T
 
     return data1
 
