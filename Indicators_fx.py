@@ -105,14 +105,14 @@ def xy_sample(df_data, close_pos, n_indic, SEQ_LEN, FUTURE_PERIOD_BASED, FUTURE_
 
 # ------------------- percentage scaling ------------------ #
 def pct_scale(data):
-    data1 = np.divide(data1[:, 1:]-data1[:, 0:-1], data1[:, 0:-1])
+    data1 = np.divide(data[:, 1:]-data[:, 0:-1], data[:, 0:-1])
     data1 = preprocessing.scale(data1, axis=1)
 
     return data1
 
 # --------------------- normal scaling -------------------- #
 def scl_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1 = preprocessing.scale(data1, axis=1)
 
     return data1
@@ -130,44 +130,42 @@ def scl_scale_group(data):
 
 # ------------------- difference scaling ------------------ #
 def dif_scale(data):
-    data1 = data.T
-    data1 = data1[:, 1:]-data1[:, :-1]
+    data1 = data[:, 1:]-data[:, :-1]
     data1 = preprocessing.scale(data1, axis=1)
-    data1 = data1.T
 
     return data1
 
 # -------------------- RSI-like scaling ------------------- #
 def rsi_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1 = (data1 - 50) / 50
 
     return data1
 
 # ----------------- Stochastic-like scaling --------------- #
 def sto_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1 = (data1 - 50) / 50
 
     return data1
 
 # -------------------- WIL-like scaling ------------------- #
 def wil_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1 = (data1 + 50) / 50
 
     return data1
 
 # -------------------- Momentum scaling ------------------- #
 def mom_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1 = data1 / 100
    
     return data1
 
 # --------------------- Model scaling --------------------- #
 def mdl_scale(data):
-    data1 = data1[:, 1:]
+    data1 = data[:, 1:]
     data1[data1>=0.5] = 1
     data1[data1< 0.5] = 0
 #     data1 = data1 - 0.5
@@ -180,8 +178,8 @@ dispatcher = {'pct':pct_scale, 'scl':scl_scale, 'scl_group':scl_scale_group, 'di
 
 # -------- Distance from the actual price scaling --------- #
 def closediff_scale(data, last_price):
-    data = data[:, 1:]
-    data1 = data - np.tile(last_price.reshape((-1, 1)), (1, data.shape[1]))
+    data1 = data[:, 1:]
+    data1 = data1 - np.tile(last_price.reshape((-1, 1)), (1, data1.shape[1]))
     data1 = preprocessing.scale(data1, axis=1, with_mean=False)
 
     return data1
@@ -189,8 +187,8 @@ def closediff_scale(data, last_price):
 
 # --------- Poercentage distance from close price --------- #
 def pctdiff2seq_scale(data, close_seq):
-    data = data[:, 1:]
-    data1 = (data - close_seq) / close_seq
+    data1 = data[:, 1:]
+    data1 = (data1 - close_seq) / close_seq
     data1 = preprocessing.scale(data1, axis=1, with_mean=False)
 
     return data1
