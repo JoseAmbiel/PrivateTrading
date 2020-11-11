@@ -161,7 +161,7 @@ def wil_scale(data):
 # -------------------- Momentum scaling ------------------- #
 def mom_scale(data):
     data1 = data1[:, 1:]
-    data1 = data1 / 50
+    data1 = data1 / 100
    
     return data1
 
