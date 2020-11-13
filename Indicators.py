@@ -159,7 +159,7 @@ def wil_scale(data):
 # -------------------- Momentum scaling ------------------- #
 def mom_scale(data):
     data1 = data[:, 1:]
-    data1 = data1 / 100
+    data1 = preprocessing.scale(data1, axis=1, with_mean=False)
    
     return data1
 
