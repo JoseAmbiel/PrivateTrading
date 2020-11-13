@@ -156,13 +156,6 @@ def wil_scale(data):
 
     return data1
 
-# -------------------- Momentum scaling ------------------- #
-def mom_scale(data):
-    data1 = data[:, 1:]
-    data1 = preprocessing.scale(data1, axis=1, with_mean=False)
-   
-    return data1
-
 # --------------------- Model scaling --------------------- #
 def mdl_scale(data):
     data1 = data[:, 1:]
@@ -173,7 +166,16 @@ def mdl_scale(data):
     return data1
 
 
-dispatcher = {'pct':pct_scale, 'scl':scl_scale, 'scl_group':scl_scale_group, 'dif':dif_scale, 'rsi':rsi_scale, 'sto':sto_scale, 'wil':wil_scale, 'mom':mom_scale, 'mdl':mdl_scale}
+dispatcher = {'pct':pct_scale, 'scl':scl_scale, 'scl_group':scl_scale_group, 'dif':dif_scale, 'rsi':rsi_scale, 'sto':sto_scale, 'wil':wil_scale, 'mdl':mdl_scale}
+
+
+# -------------------- Momentum scaling ------------------- #
+def mom_scale(data, mean):
+    data1 = data[:, 1:]
+    data1 = np.divide(data1, np.tile(mean.reshape((-1, 1)), (1, data1.shape[1])))
+    data1 = preprocessing.scale(data1, axis=1, with_mean=False)
+   
+    return data1
 
 
 # -------- Distance from the actual price scaling --------- #
@@ -203,6 +205,9 @@ def scaling_data(sample_x, scale_type, scale_vect, close_pos):
         elif scale_type[i] == 'pds':
             close_seq = sample_x[:, 1:, close_pos]
             oi2 = pctdiff2seq_scale(sample_x[:, :, scale_vect[i]], close_seq)
+        elif scale_type[i] == 'mom':
+            mean = np.mean(sample_x[:, 1:, close_pos], axis=1)
+            oi2 = mom_scale(sample_x[:, :, scale_vect[i]], mean)
         else:
             oi2 = dispatcher[scale_type[i]](sample_x[:, :, scale_vect[i]])
 
