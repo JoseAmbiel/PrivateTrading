@@ -153,7 +153,7 @@ def separator(df_close, interv):
         df_sep = np.logical_and(sep0, sep1)
 
     if '_3' in interv:
-        sep00_n = 12; sep01_n = 21; sep02_n = 45
+        sep00_n = 15; sep01_n = 30; sep02_n = 60
         sep00 = EMA(df_close, 2/(sep00_n+1))
         sep01 = EMA(df_close, 2/(sep01_n+1))
         sep02 = EMA(df_close, 2/(sep02_n+1))
